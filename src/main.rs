@@ -19,6 +19,29 @@ impl Rectangle {  // method
     }
 }
 
+enum Coin {
+    Penny,
+    Nickel,
+    Dime,
+    Quarter,
+}
+
+fn value_in_cents(coin: Coin) -> u32 {
+    match coin {
+        Coin::Penny   => 1,
+        Coin::Nickel  => 5,
+        Coin::Dime    => 10,
+        Coin::Quarter => 25,
+    }
+}
+
+fn plus_one(x: Option<i32>) -> Option<i32> {
+    match x {
+        None    => None,
+        Some(i) => Some(i+1),
+    }
+}
+
 fn main() {
     let a = [10, 20, 30, 40, 50];
 
@@ -61,6 +84,19 @@ fn main() {
     println!("Can rect1 hold rect3? {}", rect1.can_hold(&rect3));
 
     println!("rect sq {:?}", Rectangle::square(3));
+
+    let five = Some(5);
+    println!("plus_one(five) = {:?}", plus_one(five).unwrap());
+    //println!("plus_one(None) = {:?}", plus_one(None).unwrap());  // panic!
+
+    let some_u8_value = Some(3u8);
+    match some_u8_value {
+        Some(3) => println!("three"),
+        _ => (),
+    }
+    if let Some(3) = some_u8_value {
+        println!("Three!");
+    }
 }
 
 fn change(some_string: &mut String) {
