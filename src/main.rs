@@ -152,12 +152,14 @@ fn main() {
     let initial_scores = vec![10, 50];
 
     let scores: HashMap<_, _> = teams.iter().zip(initial_scores.iter()).collect();
+    println!("{:?}", scores);
 
     let field_name  = String::from("Favorite color");
     let field_value = String::from("Blue");
 
     let mut map = HashMap::new();
     map.insert(field_name, field_value);
+    println!("{:?}", map);
 
     let mut scores1 = HashMap::new();
     scores1.insert(String::from("Blue"), 10);
