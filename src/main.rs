@@ -135,6 +135,56 @@ fn main() {
         SpreadsheetCell::Float(10.12),
     ];
     println!("SpreadsheetCell row = {:?}", row);
+
+    let mut s1 = String::from("foo");
+    let s2 = "bar";
+    s1.push_str(s2);
+    println!("s2 is {}", s2);
+
+    let st1 = String::from("Hello, ");
+    let st2 = String::from("world!");
+    let st3 = st1 + &st2;  // st1 has been moved here and can no longer be used
+    println!("st3 = {}", st3);
+
+    use std::collections::HashMap;
+
+    let teams = vec![String::from("Blue"), String::from("Yellow")];
+    let initial_scores = vec![10, 50];
+
+    let scores: HashMap<_, _> = teams.iter().zip(initial_scores.iter()).collect();
+
+    let field_name  = String::from("Favorite color");
+    let field_value = String::from("Blue");
+
+    let mut map = HashMap::new();
+    map.insert(field_name, field_value);
+
+    let mut scores1 = HashMap::new();
+    scores1.insert(String::from("Blue"), 10);
+    scores1.insert(String::from("Yellow"), 50);
+    let team_name1 = String::from("Blue");
+    let score1 = scores1.get(&team_name1);
+    println!("{}: {:?}", team_name1, score1);
+
+    for (key, value) in &scores1 {
+      println!("{}: {}", key, value);
+    }
+
+    // Updating a Hash Map
+    scores1.insert(String::from("Blue"), 25);
+    println!("{:?}", scores1);
+
+    scores1.entry(String::from("Red")).or_insert(50);
+    scores1.entry(String::from("Blue")).or_insert(50);
+    println!("{:?}", scores1);
+
+    let text1 = "hello world wonderful world";
+    let mut map1 = HashMap::new();
+    for word in text1.split_whitespace() {
+      let count = map1.entry(word).or_insert(0);  // returns a mutable reference (&mut V)
+      *count += 1;
+    }
+    println!("{:?}", map1);
 }
 
 fn change(some_string: &mut String) {
