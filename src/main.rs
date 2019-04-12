@@ -187,7 +187,39 @@ fn main() {
       *count += 1;
     }
     println!("{:?}", map1);
-}
+
+    //let v_panic = vec![1,2,3];
+    //v_panic[99];  // to panic
+    // run $ RUST_BACKTRACE=1 cargo run
+
+    use std::fs::File;
+    use std::io::ErrorKind;
+    /*
+
+    let f = File::open("hello.txt");
+
+    let f = match f {
+        Ok(file) => file,
+        Err(error) => match error.kind() {
+            ErrorKind::NotFound => match File::create("hello.txt") {
+                Ok(fc) => fc,
+                Err(e) => panic!("Tried to create file but there was a problem: {:?}", e),
+            },
+            other_error => panic!("There was a problem opening the file: {:?}", other_error),
+        },
+    };
+    */
+
+    let f = File::open("hello.txt").map_err(|error| {
+        if error.kind() == ErrorKind::NotFound {
+            File::create("hello.txt").unwrap_or_else(|error| {
+                panic!("Tried to create file but there was a problem: {:?}", error);
+            })
+        } else {
+            panic!("There was a problem opening the file: {:?}", error);
+        }
+    });
+}  // main
 
 fn change(some_string: &mut String) {
     some_string.push_str(", world");
@@ -216,5 +248,4 @@ fn first_word2(s: &str) -> &str {
 
     &s[..]
 }
-
 
