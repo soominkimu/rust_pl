@@ -8,6 +8,46 @@ fn print_chap(n: i32, s: &str) {
     println!("{}*** Chap.{}{}{} {}{}", C_BLUE, C_YELLOW, n, C_GREEN, s, C_END);
 }
 
+fn chap02(run: bool) {
+    print_chap(2, "Programming a Guessing Game");
+
+    if run {
+        use std::io;
+        use std::cmp::Ordering;
+        use rand::Rng;
+
+        println!("Guess the number!");
+
+        let secret_number = rand::thread_rng().gen_range(1, 101);
+        //println!("The secret number is {}", secret_number);
+
+        loop {
+            println!("Please input your guess.");
+
+            let mut guess = String::new();  // :: associated function (static method)
+
+            io::stdin().read_line(&mut guess)  // mutable
+                .expect("Failed to read line");  // io::Result enumerations
+
+            let guess: u32 = match guess.trim().parse() { // shadow the previous value
+                Ok(num) => num,
+                Err(_)  => continue,
+            };
+
+            println!("You guessed: {}", guess);  // {} placeholder
+
+            match guess.cmp(&secret_number) {
+                Ordering::Less    => println!("Too small!"),
+                Ordering::Greater => println!("Too big!"),
+                Ordering::Equal   => {
+                    println!("You win!");
+                    break;
+                }
+            }
+        }
+    }
+}
+
 fn chap03() {
     print_chap(3, "Common Programming Concepts");
     // Listing 3-5: Looping through each element of a collection using a for loop
@@ -34,7 +74,6 @@ fn chap04() {
                 return i;
             }
         }
-
         s.len()
     }
 
@@ -46,7 +85,6 @@ fn chap04() {
                 return &s[0..i];
             }
         }
-
         &s[..]
     }
 
@@ -358,7 +396,25 @@ fn chap09() {
 
 fn chap10() {
     print_chap(10, "Generic Types, Traits, and Lifetimes");
-/*
+
+    let number_list = vec![34, 50, 25, 100, 65];
+    let mut largest = number_list[0];
+    for number in number_list {
+        if number > largest {
+            largest = number;
+        }
+    }
+    println!("The largest number is {}", largest);
+
+    let number_list = vec![102, 34, 6000, 89, 54, 2, 43, 8];
+    let mut largest = number_list[0];
+    for number in number_list {
+        if number > largest {
+            largest = number;
+        }
+    }
+    println!("The largest number is {}", largest);
+
     fn largest_f(list: &[i32]) -> i32 {
         let mut largest = list[0];
         for &item in list.iter() {
@@ -368,20 +424,18 @@ fn chap10() {
         }
         largest
     }
-*/
+
     let number_list = vec![34, 50, 25, 100, 65];
-    let mut largest = number_list[0];
-    for number in number_list {
-        if number > largest {
-            largest = number;
-        }
-    }
-//    let result = largest_f(&number_list);
-//    println!("The largest number is {} == {}", largest, result);
-    println!("The largest number is {}", largest);
+    let result = largest_f(&number_list);
+    println!("The largest number is {}", result);
+
+    let number_list = vec![102, 34, 6000, 89, 54, 2, 43, 8];
+    let result = largest_f(&number_list);
+    println!("The largest number is {}", result);
 }
 
 fn main() {
+    chap02(false);
     chap03();
     chap04();
     chap05();
