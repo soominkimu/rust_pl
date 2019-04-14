@@ -1,48 +1,102 @@
-const C_RED    : &str = "\x1B[0;31m";
-const C_GREEN  : &str = "\x1B[0;32m";
-const C_YELLOW : &str = "\x1B[0;33m";
-const C_BLUE   : &str = "\x1B[0;34m";
-const C_END    : &str = "\x1B[0m";
-
-fn print_chap(n: i32, s: &str) {
-    println!("{}*** Chap.{}{}{} {}{}", C_BLUE, C_YELLOW, n, C_GREEN, s, C_END);
+// Mozilla, The Rust Programming Language: https://doc.rust-lang.org/book/index.html
+// Rust by Example: https://doc.rust-lang.org/rust-by-example/
+//
+enum Color {
+    Red,
+    Green,
+    Yellow,
+    Blue,
+    No
 }
 
-fn chap02(run: bool) {
+fn tc(clr: Color) -> &'static str {  // Lifetime Elision
+    match clr {
+        Color::Red    => "\x1B[0;31m",
+        Color::Green  => "\x1B[0;32m",
+        Color::Yellow => "\x1B[0;33m",
+        Color::Blue   => "\x1B[0;34m",
+        Color::No     => "\x1B[0m",
+    }
+}
+
+fn print_chap(n: i32, s: &str) {  // string slice, an immutable view of a string
+    println!("{}***{} Chap.{}{}{} {}{}",
+             tc(Color::Red), tc(Color::Blue), tc(Color::Yellow), n, tc(Color::Green), s, tc(Color::No));
+}
+
+fn intro() {
+    // https://theasciicode.com.ar/extended-ascii-code/black-square-ascii-code-254.html
+    fn printline(c_left: char, c: char, c_right: char, count: u32) {
+        print!("{}", c_left);
+        let mut x = 0u32;
+        loop {
+            print!("{}", c);
+            x += 1;
+            if x == count { break; }
+        }
+        println!("{}", c_right);
+    }
+    const LEN : u32 = 37;
+    const BAR_H : char = '═';
+    const BAR_V : char = '║';
+    let mut y = 0u32;
+
+    print!("{}", tc(Color::Blue));
+    printline('╔', BAR_H, '╗', LEN);
+    loop {
+        if y == 1 {
+            println!("{}{}    The {}Rust{} Programming Language    {}{}",
+                     BAR_V, tc(Color::Red), tc(Color::Yellow), tc(Color::Red), tc(Color::Blue), BAR_V);
+        } else {
+            printline(BAR_V, ' ', BAR_V, LEN);
+        }
+        y += 1;
+        if y == 3 { break; }
+    }
+    printline('╚', BAR_H, '╝', LEN);
+
+    for j in [30, 90].iter() {
+        for i in 1..8 {
+            print!("\x1B[0;{}m█\x1B[0m", j+i);
+        }
+    }
+    println!();
+}
+
+fn chap02() {
     print_chap(2, "Programming a Guessing Game");
 
-    if run {
-        use std::io;
-        use std::cmp::Ordering;
-        use rand::Rng;
+    use std::io;
+    use std::cmp::Ordering;
+    use rand::Rng;
 
-        println!("Guess the number!");
+    println!("Guess the number!");
 
-        let secret_number = rand::thread_rng().gen_range(1, 101);
-        //println!("The secret number is {}", secret_number);
+    let secret_number = rand::thread_rng().gen_range(1, 101);
+    println!("The secret number is {}", secret_number);
 
-        loop {
-            println!("Please input your guess.");
+    loop {
+        println!("Please input your guess.");
 
-            let mut guess = String::new();  // :: associated function (static method)
+        let mut guess = String::new();  // :: associated function (static method)
 
-            io::stdin().read_line(&mut guess)  // mutable
-                .expect("Failed to read line");  // io::Result enumerations
+        io::stdin().read_line(&mut guess)    // mutable
+            .expect("Failed to read line");  // io::Result enumerations
+        guess = secret_number.to_string();   // DEBUG: just to skip
 
-            let guess: u32 = match guess.trim().parse() { // shadow the previous value
-                Ok(num) => num,
-                Err(_)  => continue,
-            };
+        let guess: u32 = match guess.trim().parse() { // shadow the previous value
+            Ok(num) => num,
+            Err(_)  => continue,
+        };
 
-            println!("You guessed: {}", guess);  // {} placeholder
+        println!("You guessed: {}", guess);  // {} placeholder
 
-            match guess.cmp(&secret_number) {
-                Ordering::Less    => println!("Too small!"),
-                Ordering::Greater => println!("Too big!"),
-                Ordering::Equal   => {
-                    println!("You win!");
-                    break;
-                }
+        match guess.cmp(&secret_number) {
+            Ordering::Less    => println!("Too small!"),
+            Ordering::Greater => println!("Too big!"),
+            Ordering::Equal   => {
+                println!("You win!");
+                break;
             }
         }
     }
@@ -326,7 +380,8 @@ fn chap09() {
     fn read_username_from_file_chained() -> Result<String, io::Error> {
         let mut s = String::new();
 
-        File::open(HELLO_TXT)?.read_to_string(&mut s)?;
+        let bytes : usize = File::open(HELLO_TXT)?.read_to_string(&mut s)?;
+        println!("bytes: {}", bytes);
 
         Ok(s)
     }
@@ -347,15 +402,13 @@ fn chap09() {
             if value < 1 || value > 100 {
                 panic!("Guess value must be between 1 and 100, got {}.", value);
             }
-
             Guess {
                 value
             }
         }
-
-        pub fn value(&self) -> i32 {
-            self.value
-        }
+        //pub fn value(&self) -> i32 {
+        //    self.value
+        //}
     }
 
     let _f1 = File::open(HELLO_TXT);
@@ -397,6 +450,15 @@ fn chap09() {
 fn chap10() {
     print_chap(10, "Generic Types, Traits, and Lifetimes");
 
+    fn print_largest_num(n: i32) {
+        println!("The largest number is {}", n);
+    }
+
+    fn print_largest_char(c: char) {
+        println!("The largest char is {}", c);
+    }
+
+    // Removing Duplication by Extracting a Function
     let number_list = vec![34, 50, 25, 100, 65];
     let mut largest = number_list[0];
     for number in number_list {
@@ -404,7 +466,7 @@ fn chap10() {
             largest = number;
         }
     }
-    println!("The largest number is {}", largest);
+    print_largest_num(largest);
 
     let number_list = vec![102, 34, 6000, 89, 54, 2, 43, 8];
     let mut largest = number_list[0];
@@ -413,7 +475,7 @@ fn chap10() {
             largest = number;
         }
     }
-    println!("The largest number is {}", largest);
+    print_largest_num(largest);
 
     fn largest_f(list: &[i32]) -> i32 {
         let mut largest = list[0];
@@ -427,15 +489,66 @@ fn chap10() {
 
     let number_list = vec![34, 50, 25, 100, 65];
     let result = largest_f(&number_list);
-    println!("The largest number is {}", result);
+    print_largest_num(result);
 
     let number_list = vec![102, 34, 6000, 89, 54, 2, 43, 8];
     let result = largest_f(&number_list);
-    println!("The largest number is {}", result);
+    print_largest_num(result);
+
+    // Genereic Data Types
+    fn largest_i32(list: &[i32]) -> i32 {
+        let mut largest = list[0];
+        for &item in list.iter() {
+            if item > largest {
+                largest = item;
+            }
+        }
+        largest
+    }
+
+    fn largest_char(list: &[char]) -> char {
+        let mut largest = list[0];
+        for &item in list.iter() {
+            if item > largest {
+                largest = item;
+            }
+        }
+        largest
+    }
+
+    let number_list = vec![34, 50, 25, 100, 65];
+    let result = largest_i32(&number_list);
+    print_largest_num(result);
+
+    let char_list = vec!['y', 'm', 'a', 'q'];
+    let result = largest_char(&char_list);
+    print_largest_char(result);
+
+    /*
+    // Listing 10-5: A definition of the largest funciton that uses generic type parameters but doesn't compile yet
+    fn alargest<T>(list: &[T]) -> T {
+        let mut largest = list[0];
+        for &item in list.iter() {
+            if item > largest {  // `T` might need a bound for `std::cmp::PartialOrd`
+                largest = item;
+            }
+        }
+        largest
+    }
+
+    let number_list = vec![34, 50, 25, 100, 65];
+    let result = alargest(&number_list);
+    print_largest_num(result);
+
+    let char_list = vec!['y', 'm', 'a', 'q'];
+    let result = alargest(&char_list);
+    print_largest_char(result);
+    */
 }
 
 fn main() {
-    chap02(false);
+    intro();
+    chap02();
     chap03();
     chap04();
     chap05();
