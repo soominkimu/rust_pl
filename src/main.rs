@@ -6,7 +6,7 @@ enum Color {
     Green,
     Yellow,
     Blue,
-    No
+    No,
 }
 
 fn tc(clr: Color) -> &'static str {  // Lifetime Elision
@@ -63,6 +63,11 @@ fn intro() {
     println!();
 }
 
+fn chap01() {
+    print_chap(1, "Getting Started");
+    println!("Hello, world!");
+}
+
 fn chap02() {
     print_chap(2, "Programming a Guessing Game");
 
@@ -104,14 +109,66 @@ fn chap02() {
 
 fn chap03() {
     print_chap(3, "Common Programming Concepts");
+
+    const MAX_POINTS: u32 = 100_000;
+    println!("Max points:{}", MAX_POINTS);
+
+    let guess: u32 = "42".parse().expect("Not a number!");
+    let heart_eyed_cat = '😻';
+    println!("guess = {} {}", guess, heart_eyed_cat);
+
+    let tup: (i32, f64, u8) = (500, 6.4, 1);
+    let (x, y, z) = tup;
+    println!("The value of (x, y, z) is: ({}, {}, {}) = ({}, {}, {})",
+            x, y, z, tup.0, tup.1, tup.2);
+
+    let a: [i32; 5] = [1, 2, 3, 4, 5];
+    println!("Array a: [i32; 5] = {:?}", a);
+    let a = [3; 5];
+    println!("Array a = [3; 5] = {:?}", a);
+
+    let y = {
+        let x = 3;
+        x + 1
+    };
+    println!("The value of y is: {}", y);
+
+    fn plus_one(x: i32) -> i32 {
+        x + 1
+    }
+    let x = plus_one(5);
+    println!("The value of x is: {}", x);
+
+    fn liftoff(clr: Color) {
+        println!("{}LIFTOFF!!!{}", tc(clr), tc(Color::No));
+    }
+
+    let mut number = 10;
+    while number != 0 {
+        print!("{}! ", number);
+        number -= 1;
+    }
+    liftoff(Color::Red);
+
     // Listing 3-5: Looping through each element of a collection using a for loop
     let a = [10, 20, 30, 40, 50];
 
-    print!("the value is: ");
+    let mut index = 0;
+    while index < 5 {
+        print!("{},", a[index]);
+        index += 1;
+    }
+    println!(" // while loop");
+
     for element in a.iter() {
         print!("{},", element);
     }
-    println!();
+    println!(" // for loop");
+
+    for number in (1..11).rev() {
+        print!("{}! ", number);
+    }
+    liftoff(Color::Yellow);
 }
 
 fn chap04() {
@@ -248,6 +305,10 @@ fn chap06() {
         value_in_cents(Coin::Nickel),
         value_in_cents(Coin::Dime),
         value_in_cents(Coin::Quarter));
+}
+
+fn chap07() {
+    print_chap(7, "Packages, Crates, and Modules");
 }
 
 fn chap08() {
@@ -546,15 +607,71 @@ fn chap10() {
     */
 }
 
+fn chap11() {
+    print_chap(11, "");
+}
+
+fn chap12() {
+    print_chap(12, "");
+}
+
+fn chap13() {
+    print_chap(13, "");
+}
+
+fn chap14() {
+    print_chap(14, "");
+}
+
+fn chap15() {
+    print_chap(15, "");
+}
+
+fn chap16() {
+    print_chap(16, "");
+}
+
+fn chap17() {
+    print_chap(17, "");
+}
+
+fn chap18() {
+    print_chap(18, "");
+}
+
+fn chap19() {
+    print_chap(19, "");
+}
+
+fn chap20() {
+    print_chap(20, "Advanced Features");
+}
+
+fn chap21() {
+    print_chap(21, "Final Project: Building a Multithreaded Web Server");
+}
+
 fn main() {
     intro();
-    chap02();
-    chap03();
-    chap04();
-    chap05();
-    chap06();
-
-    chap08();
-    chap09();
-    chap10();
+    chap01(); // Getting Started
+    chap02(); // Programming a Guessing Game
+    chap03(); // Common Programming Concepts
+    chap04(); // Understanding Ownership
+    chap05(); // Using Structs to Structure Related Data
+    chap06(); // Enums and Pattern Matching
+    chap07(); // Packages, Crates, and Modules
+    chap08(); // Common Collections
+    chap09(); // Error Handling
+    chap10(); // Generic Types, Traits, and Lifetimes
+    chap11(); // 
+    chap12(); // 
+    chap13(); // 
+    chap14(); // 
+    chap15(); // 
+    chap16(); // 
+    chap17(); // 
+    chap18(); // 
+    chap19(); // 
+    chap20(); // Advanced Features
+    chap21(); // Final Projects: Building a Multithreaded Web Server
 }
