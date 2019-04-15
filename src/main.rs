@@ -9,19 +9,21 @@ enum Color {
     No,
 }
 
-fn tc(clr: Color) -> &'static str {  // Lifetime Elision
-    match clr {
-        Color::Red    => "\x1B[0;31m",
-        Color::Green  => "\x1B[0;32m",
-        Color::Yellow => "\x1B[0;33m",
-        Color::Blue   => "\x1B[0;34m",
-        Color::No     => "\x1B[0m",
+impl Color {
+    fn s(&self) -> &'static str {  // stringify, Lifetime Elision
+        match *self {
+            Color::Red    => "\x1B[0;31m",
+            Color::Green  => "\x1B[0;32m",
+            Color::Yellow => "\x1B[0;33m",
+            Color::Blue   => "\x1B[0;34m",
+            Color::No     => "\x1B[0m",
+        }
     }
 }
 
 fn print_chap(n: i32, s: &str) {  // string slice, an immutable view of a string
     println!("{}***{} Chap.{}{}{} {}{}",
-             tc(Color::Red), tc(Color::Blue), tc(Color::Yellow), n, tc(Color::Green), s, tc(Color::No));
+             Color::Red.s(), Color::Blue.s(), Color::Yellow.s(), n, Color::Green.s(), s, Color::No.s());
 }
 
 fn intro() {
@@ -36,23 +38,16 @@ fn intro() {
         }
         println!("{}", c_right);
     }
-    const LEN : u32 = 37;
+    const LEN   : u32 = 37;
     const BAR_H : char = '═';
     const BAR_V : char = '║';
-    let mut y = 0u32;
 
-    print!("{}", tc(Color::Blue));
+    print!("{}", Color::Blue.s());
     printline('╔', BAR_H, '╗', LEN);
-    loop {
-        if y == 1 {
-            println!("{}{}    The {}Rust{} Programming Language    {}{}",
-                     BAR_V, tc(Color::Red), tc(Color::Yellow), tc(Color::Red), tc(Color::Blue), BAR_V);
-        } else {
-            printline(BAR_V, ' ', BAR_V, LEN);
-        }
-        y += 1;
-        if y == 3 { break; }
-    }
+    printline(BAR_V, ' ', BAR_V, LEN);
+    println!("{}{}    The {}Rust{} Programming Language    {}{}",
+             BAR_V, Color::Red.s(), Color::Yellow.s(), Color::Red.s(), Color::Blue.s(), BAR_V);
+    printline(BAR_V, ' ', BAR_V, LEN);
     printline('╚', BAR_H, '╝', LEN);
 
     for j in [30, 90].iter() {
@@ -140,7 +135,7 @@ fn chap03() {
     println!("The value of x is: {}", x);
 
     fn liftoff(clr: Color) {
-        println!("{}LIFTOFF!!!{}", tc(clr), tc(Color::No));
+        println!("{}LIFTOFF!!!{}", clr.s(), Color::No.s());
     }
 
     let mut number = 10;
@@ -608,47 +603,47 @@ fn chap10() {
 }
 
 fn chap11() {
-    print_chap(11, "");
+    print_chap(11, "Writing Automated Tests");
 }
 
 fn chap12() {
-    print_chap(12, "");
+    print_chap(12, "An I/O Project: Building a Command Line Program");
 }
 
 fn chap13() {
-    print_chap(13, "");
+    print_chap(13, "Functional Language Features: Iterators and Closures");
 }
 
 fn chap14() {
-    print_chap(14, "");
+    print_chap(14, "More about Cargo and Crates.io");
 }
 
 fn chap15() {
-    print_chap(15, "");
+    print_chap(15, "Smart Pointers");
 }
 
 fn chap16() {
-    print_chap(16, "");
+    print_chap(16, "Fearless Concurrency");
 }
 
 fn chap17() {
-    print_chap(17, "");
+    print_chap(17, "Object Oriented PRogramming Features of Rust");
 }
 
 fn chap18() {
-    print_chap(18, "");
+    print_chap(18, "Patterns and Matching");
 }
 
 fn chap19() {
-    print_chap(19, "");
+    print_chap(19, "Advanced Features");
 }
 
 fn chap20() {
-    print_chap(20, "Advanced Features");
+    print_chap(20, "Final Project: Building a Multithreaded Web Server");
 }
 
 fn chap21() {
-    print_chap(21, "Final Project: Building a Multithreaded Web Server");
+    print_chap(21, "Appendix");
 }
 
 fn main() {
@@ -663,15 +658,15 @@ fn main() {
     chap08(); // Common Collections
     chap09(); // Error Handling
     chap10(); // Generic Types, Traits, and Lifetimes
-    chap11(); // 
-    chap12(); // 
-    chap13(); // 
-    chap14(); // 
-    chap15(); // 
-    chap16(); // 
-    chap17(); // 
-    chap18(); // 
-    chap19(); // 
-    chap20(); // Advanced Features
-    chap21(); // Final Projects: Building a Multithreaded Web Server
+    chap11(); // Writing Automated Tests
+    chap12(); // An I/O Project: Building a Command Line Program
+    chap13(); // Functional Language Features: Iterators and Closures
+    chap14(); // More about Cargo and Crates.io
+    chap15(); // Smart Pointers
+    chap16(); // Fearless Concurrency
+    chap17(); // Object Oriented PRogramming Features of Rust
+    chap18(); // Patterns and Matching
+    chap19(); // Advanced Features
+    chap20(); // Final Projects: Building a Multithreaded Web Server
+    chap21(); // Appendix
 }
