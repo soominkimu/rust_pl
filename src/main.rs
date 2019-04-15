@@ -26,9 +26,13 @@ fn print_chap(n: i32, s: &str) {  // string slice, an immutable view of a string
              Color::Red.s(), Color::Blue.s(), Color::Yellow.s(), n, Color::Green.s(), s, Color::No.s());
 }
 
+fn print_section(s: &str) {
+    println!("{}> {}{}{}", Color::Red.s(), Color::Yellow.s(), s, Color::No.s());
+}
+
 fn intro() {
     // https://theasciicode.com.ar/extended-ascii-code/black-square-ascii-code-254.html
-    fn printline(c_left: char, c: char, c_right: char, count: u32) {
+    fn print_box_ln(c_left: char, c: char, c_right: char, count: u32) {
         print!("{}", c_left);
         let mut x = 0u32;
         loop {
@@ -43,12 +47,12 @@ fn intro() {
     const BAR_V : char = '║';
 
     print!("{}", Color::Blue.s());
-    printline('╔', BAR_H, '╗', LEN);
-    printline(BAR_V, ' ', BAR_V, LEN);
+    print_box_ln('╔', BAR_H, '╗', LEN);
+    print_box_ln(BAR_V, '░', BAR_V, LEN);
     println!("{}{}    The {}Rust{} Programming Language    {}{}",
              BAR_V, Color::Red.s(), Color::Yellow.s(), Color::Red.s(), Color::Blue.s(), BAR_V);
-    printline(BAR_V, ' ', BAR_V, LEN);
-    printline('╚', BAR_H, '╝', LEN);
+    print_box_ln(BAR_V, '░', BAR_V, LEN);
+    print_box_ln('╚', BAR_H, '╝', LEN);
 
     for j in [30, 90].iter() {
         for i in 1..8 {
@@ -505,6 +509,7 @@ fn chap09() {
 
 fn chap10() {
     print_chap(10, "Generic Types, Traits, and Lifetimes");
+    print_section("Removing Duplication by Extracting a Function");
 
     fn print_largest_num(n: i32) {
         println!("The largest number is {}", n);
@@ -533,6 +538,7 @@ fn chap10() {
     }
     print_largest_num(largest);
 
+    print_section("Generic Data Types");
     fn largest_f(list: &[i32]) -> i32 {
         let mut largest = list[0];
         for &item in list.iter() {
@@ -600,10 +606,63 @@ fn chap10() {
     let result = alargest(&char_list);
     print_largest_char(result);
     */
+
+    struct Point<T> {
+        x: T,
+        y: T,
+    }
+    let integer = Point { x: 5,   y: 10 };
+    let float   = Point { x: 1.0, y: 4.01 };
+    println!("Listing 10-6. {},{}  {},{}", integer.x, integer.y, float.x, float.y);
+
+    struct Point2<T, U> {
+        x: T,
+        y: U,
+    }
+    let integer_and_float = Point2 { x: 5, y: 4.01 };
+    println!("{},{}", integer_and_float.x, integer_and_float.y);
+
+    impl<T> Point<T> {
+        fn x(&self) -> &T {
+            &self.x
+        }
+    }
+    let p = Point { x: 5, y: 10 };
+    println!("p.x = {}", p.x());
+
+    impl Point<f32> {
+        fn distance_from_origin(&self) -> f32 {
+            (self.x.powi(2) + self.y.powi(2)).sqrt()
+        }
+    }
+    println!("dist = {}", float.distance_from_origin());
+
+    // Listing 10-11
+    impl<T, U> Point2<T, U> {
+        fn mixup<V, W>(self, other: Point2<V, W>) -> Point2<T, W> {
+            Point2 {
+                x: self.x,
+                y: other.y,
+            }
+        }
+    }
+    let p1 = Point2 { x: 5, y: 10.4 };
+    let p2 = Point2 { x: "Hello", y: 'c' };
+    let p3 = p1.mixup(p2);
+    println!("p3.x = {}, p3.y = {}", p3.x, p3.y);
+
+    // monomorphization
+    let integer = Some(5);
+    let float   = Some(5.0);
+    println!("monomorphization: {}, {:?}", integer.unwrap(), float);
+
+    print_section("Traits: Defining Shared Behavior");
+    print_section("Validating References with Lifetimes");
 }
 
 fn chap11() {
     print_chap(11, "Writing Automated Tests");
+    
 }
 
 fn chap12() {
