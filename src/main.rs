@@ -313,6 +313,15 @@ fn chap07() {
 fn chap08() {
     print_chap(8, "Common Collections");
 
+    print_section("Storing Lists of Values with Vectors");
+    //let v: Vec<i32> = Vec::new();
+    let mut v = Vec::new();
+    v.push(5);
+    v.push(6);
+    v.push(7);
+    v.push(8);
+    println!("v = {:?}", v);
+
     let mut v = vec![1, 2, 3, 4, 5];
     let third: &i32 = &v[2];
     println!("The third element is {}", third);
@@ -346,6 +355,7 @@ fn chap08() {
     ];
     println!("SpreadsheetCell row = {:?}", row);
 
+    print_section("Storing UTF-8 Encoded Text with Strings");
     let mut s1 = String::from("foo");
     let s2 = "bar";
     s1.push_str(s2);
@@ -356,6 +366,7 @@ fn chap08() {
     let st3 = st1 + &st2;  // st1 has been moved here and can no longer be used
     println!("st3 = {}", st3);
 
+    print_section("Storing Keys with Associated Values in Hash Maps");
     use std::collections::HashMap;
 
     let teams = vec![String::from("Blue"), String::from("Yellow")];
@@ -401,10 +412,12 @@ fn chap08() {
 
 fn chap09() {
     print_chap(9, "Error Handling");
+    print_section("Unrecoverable Errors with panic!");
     //let v_panic = vec![1,2,3];
     //v_panic[99];  // to panic
     // run $ RUST_BACKTRACE=1 cargo run
 
+    print_section("Recoverable Errors with Result");
     use std::fs::File;
     use std::io::ErrorKind;
 
@@ -503,6 +516,7 @@ fn chap09() {
     println!("{}", read_username_from_file_chained().unwrap());
     println!("{}", read_username_from_file_shortest().unwrap());
 
+    print_section("To panic! or Not to panic!");
     let n910 = Guess::new(50);
     println!("Guess: {}", n910.value);
 }
